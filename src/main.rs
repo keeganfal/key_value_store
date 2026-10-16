@@ -1,12 +1,17 @@
+mod handlers;
+mod routes;
+mod state;
 mod store;
-use store::Store;
 
-fn main() {
-    let mut ds = Store::new();
+use state::AppState;
+use tokio::net::TcpListener;
 
-    ds.set("user1".to_string(), "person".to_string());
+#[tokio::main]
+async fn main() {
+    let state = AppState::new();
+    let app = routes::create_router(state);
 
-    let val = ds.get("user1".to_string());
-
-    dbg!(&val);
+    let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    println!("Listening on http://localhost:3000");
+    axum::serve(listener, app).await.unwrap();
 }
