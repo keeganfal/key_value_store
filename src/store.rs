@@ -1,21 +1,25 @@
 use std::collections::HashMap;
 
 pub struct Store {
-    map: HashMap<String, String>,
+    data: HashMap<String, String>,
 }
 
 impl Store {
     pub fn new() -> Self {
         Store {
-            map: HashMap::new(),
+            data: HashMap::new(),
         }
     }
 
-    pub fn get(&self, key: String) -> Option<&String> {
-        return self.map.get(&key);
+    pub fn get(&self, key: &str) -> Option<String> {
+        self.data.get(key).cloned()
     }
 
     pub fn set(&mut self, key: String, value: String) {
-        self.map.insert(key, value);
+        self.data.insert(key, value);
+    }
+
+    pub fn delete(&mut self, key: &str) {
+        self.data.remove(key);
     }
 }
